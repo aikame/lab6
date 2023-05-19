@@ -62,8 +62,10 @@ def DiffieHellman (a = int(), g = int(), p = int()):
 sg.theme("GrayGrayGray")
 
 layout = [
-          [sg.Text("Ключ клиента b")],
-          [sg.Input(key = "KEY", expand_x = True, expand_y = True)],
+          [sg.Text("Ключи сервера a, p, g")],
+          [sg.Input(key = "a", expand_x = True, expand_y = True),
+           sg.Input(key = "p", expand_x = True, expand_y = True),
+           sg.Input(key = "g", expand_x = True, expand_y = True)],
           [sg.Button("Сгенерировать закрытый ключ", key = "GEN")],
           [sg.Output(key = 'OUTPUT', expand_x = True, expand_y = True)],
           [sg.Button("Запустить обмен ключами", key="START")]
@@ -76,6 +78,8 @@ while True:
     if event in (None, 'Exit'):
         break
     if event == 'GEN':
-        main['KEY'].update(random.randint(1, 1000))
+        main['a'].update(random.randint(1, 1000))
+        main['p'].update(genP())
+        main['a'].update(genG(values['p']))
     if event == 'START':
-        main['OUTPUT'].update(DiffieHellman(b = values["KEY"]))
+        main['OUTPUT'].update(DiffieHellman(a = values['a'], g = values['g'], p = values['p']))
