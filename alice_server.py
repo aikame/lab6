@@ -55,7 +55,7 @@ def DiffieHellman (a, g, p):
     p = int(a)
     A = g**a % p
     keysSend = str(A) + " " + str(g) + " " + str(p)
-    sock.send(str(keysSend).encode("ascii"))
+    conn.send(str(keysSend).encode("ascii"))
     B = ''
     while B != '':
         B = conn.recv(1024).decode("ascii")
@@ -88,4 +88,7 @@ while True:
         main['p'].update(p)
         main['g'].update(g)
     if event == 'START':
+        if not values['a'] or not values['g']  or not values['p']:
+            main['OUTPUT'].update("Введите ключи!!")
+            continue
         main['OUTPUT'].update(DiffieHellman(a = values['a'], g = values['g'], p = values['p']))
