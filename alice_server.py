@@ -30,7 +30,7 @@ def FermTest(n = int(), c = int()):
     else:
         return False
 
-def genG(p):
+def genG(p = int()):
     while True:
         g = random.randrange(10**5 + 1, 10**6, 2)
         c = random.randint(1, 15)
@@ -49,7 +49,10 @@ def genP():
         c = random.randint(1, 15)
     return p
 
-def DiffieHellman (a = int(), g = int(), p = int()):
+def DiffieHellman (a, g, p):
+    a = int(a)
+    g = int(a)
+    p = int(a)
     A = g**a % p
     keysSend = str(A) + " " + str(g) + " " + str(p)
     sock.send(str(keysSend).encode("ascii"))
@@ -78,8 +81,11 @@ while True:
     if event in (None, 'Exit'):
         break
     if event == 'GEN':
-        main['a'].update(random.randint(1, 1000))
-        main['p'].update(genP())
-        main['a'].update(genG(values['p']))
+        a = random.randint(1, 1000)
+        p = genP()
+        g = genG(p)
+        main['a'].update(a)
+        main['p'].update(p)
+        main['g'].update(g)
     if event == 'START':
         main['OUTPUT'].update(DiffieHellman(a = values['a'], g = values['g'], p = values['p']))
