@@ -1,15 +1,14 @@
-import PySimpleGUI
+import PySimpleGUI as sg
 import socket
 import random
-import math
 
 print("awaiting for connection...")
-#host = ""
-#port = 5000
-#sock = socket.socket()
-#sock.bind((host, port))
-#sock.listen(1)
-#conn, addr = sock.accept()
+host = ""
+port = 5000
+sock = socket.socket()
+sock.bind((host, port))
+sock.listen(1)
+conn, addr = sock.accept()
 print("connected!")
 
 def phi(n = int()):
@@ -60,6 +59,23 @@ def DiffieHellman (a = int(), g = int(), p = int()):
     B = int(B)
     return "Key: " + str(B**a % p)
 
-p = genP()
-g = genG(p)
-a = random.randint(1, 1000)
+sg.theme("GrayGrayGray")
+
+layout = [
+          [sg.Text("Ключ клиента b")],
+          [sg.Input(key = "KEY", expand_x = True, expand_y = True)],
+          [sg.Button("Сгенерировать закрытый ключ", key = "GEN")],
+          [sg.Output(key = 'OUTPUT', expand_x = True, expand_y = True)],
+          [sg.Button("Запустить обмен ключами", key="START")]
+          ]
+
+main = sg.Window("Diffie-Hellman", layout, resizable=True)
+
+while True:
+    event, values = main.read()
+    if event in (None, 'Exit'):
+        break
+    if event == 'GEN':
+        main['KEY'].update(random.randint(1, 1000))
+    if event == 'START':
+        main['OUTPUT'].update(DiffieHellman(b = values["KEY"]))
